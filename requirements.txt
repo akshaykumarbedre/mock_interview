@@ -1,0 +1,11 @@
+streamlit
+pyttsx3
+SpeechRecognition
+python-dotenv
+langchain
+langchain-google-genai
+google-generativeai
+pygame
+langchain-community
+langchain-core
+pyaudio
