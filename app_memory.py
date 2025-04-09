@@ -68,14 +68,14 @@ runnable_with_history = RunnableWithMessageHistory(
 questions = [
     "Tell me about a challenging machine learning project you've worked on.",
     "How do you approach feature selection in your ML models?",
-    "Explain how you would implement a recommendation system from scratch.",
+    # "Explain how you would implement a recommendation system from scratch.",
     "What's your experience with deploying ML models to production?",
     "How do you handle missing data in a dataset?",
     "Explain the difference between supervised and unsupervised learning with examples.",
-    "How would you detect and handle outliers in your dataset?",
+    # "How would you detect and handle outliers in your dataset?",
     "What metrics would you use to evaluate a classification model?",
-    "Describe your experience with deep learning frameworks.",
-    "How do you approach A/B testing for model improvements?"
+    # "Describe your experience with deep learning frameworks.",
+    # "How do you approach A/B testing for model improvements?"
 ]
 
 
@@ -84,12 +84,67 @@ def speak(text):
     engine.say(text)
     engine.runAndWait()
 
-# Speech recognition function
+# def listen_to_answer():
+#     with mic as source:
+#         recognizer.adjust_for_ambient_noise(source)
+#         print("🎙️ Listening... (Press Enter when done speaking)")
+#         print("Start speaking now...")
+        
+#         # Set a longer phrase_time_limit (e.g., 60 seconds)
+#         audio = recognizer.listen(source, phrase_time_limit=60,timeout=60)
+        
+#         # Optional: Allow manual control by pressing Enter to stop recording
+#         # This would require a threading approach, which is more complex
+
+#     try:
+#         response = recognizer.recognize_google(audio)
+#         print(f"🗣️ You said: {response}")
+#         return response
+#     except sr.UnknownValueError:
+#         print("❌ Sorry, I couldn't understand you.")
+#         return "[Unrecognized speech]"
+#     except sr.RequestError:
+#         print("⚠️ Could not reach the speech service.")
+#         return "[Speech service error]"
+
+# def listen_to_answer(duration=60):  # Record for 60 seconds
+#     print(f"🎙️ You will have {duration} seconds to answer.")
+#     print("Press Enter when ready to start...")
+#     input()
+    
+#     with mic as source:
+#         recognizer.adjust_for_ambient_noise(source)
+#         print(f"Recording for {duration} seconds. Start speaking now...")
+        
+#         # Record for a fixed duration
+#         audio = recognizer.record(source, duration=duration)
+    
+#     try:
+#         response = recognizer.recognize_google(audio)
+#         print(f"🗣️ You said: {response}")
+#         return response
+#     except sr.UnknownValueError:
+#         print("❌ Sorry, I couldn't understand you.")
+#         return "[Unrecognized speech]"
+#     except sr.RequestError:
+#         print("⚠️ Could not reach the speech service.")
+#         return "[Speech service error]"
+
 def listen_to_answer():
     with mic as source:
         recognizer.adjust_for_ambient_noise(source)
-        print("🎙️ Listening...")
-        audio = recognizer.listen(source)
+        print("🎙️ Listening... Recording will stop after 3 seconds of silence.")
+        
+        # Lower the pause threshold to 3 seconds instead of 5
+        recognizer.pause_threshold = 2
+        
+        # Make the recognizer more responsive with these settings
+        recognizer.dynamic_energy_threshold = True
+       
+       # May need adjustment based on your microphone
+        
+        # Listen with shorter phrase_time_limit to process speech more quickly
+        audio = recognizer.listen(source, phrase_time_limit=180)
 
     try:
         response = recognizer.recognize_google(audio)
@@ -101,6 +156,7 @@ def listen_to_answer():
     except sr.RequestError:
         print("⚠️ Could not reach the speech service.")
         return "[Speech service error]"
+    
 
 # Main interview function
 def run_mock_interview(session_id="default"):
